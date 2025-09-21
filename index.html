@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>دعوتنا إلى حفل الزفاف</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#c06c84;
+      --accent-2:#355c7d;
+      --bg:#0f1724;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Cairo',system-ui,Arial; background:linear-gradient(130deg,var(--bg),#081224 60%); color:#f3f4f6}
+    .wrap{max-width:980px;margin:32px auto;padding:24px;display:none}
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:center}
+    .card{background:linear-gradient(180deg,var(--glass),var(--glass-2));border-radius:14px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.6);backdrop-filter:blur(8px)}
+    h1{margin:0;font-size:28px;color:var(--accent);}
+    .names{font-size:32px;font-weight:700;margin:8px 0}
+    .subtitle{opacity:0.85}
+    .countdown{display:flex;gap:8px;margin-top:12px}
+    .countdown .seg{background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:8px;text-align:center;min-width:64px}
+    .seg .num{font-size:20px;font-weight:700}
+    .seg .lbl{font-size:12px;opacity:0.8}
+    .controls{display:flex;gap:8px;margin-top:16px}
+    button{background:var(--accent);border:none;padding:10px 12px;border-radius:10px;color:white;cursor:pointer}
+    .opt{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;color:white}
+    .rsvp{margin-top:18px}
+    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .guest-preview{margin-top:12px;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));}
+    .map{height:240px;border-radius:12px;overflow:hidden;margin-top:12px}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .gallery img{width:100%;height:100px;object-fit:cover;border-radius:8px}
+    footer{margin-top:18px;text-align:center;opacity:0.8}
+    @media (max-width:880px){.hero{grid-template-columns:1fr;}.gallery{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px}}
+    .floating{position:relative}
+    .floating::after{content:'';position:absolute;left:10px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(192,108,132,0.12), transparent 30%);filter:blur(22px);z-index:-1}
+
+    /* splash */
+    #splash{position:fixed;inset:0;background:linear-gradient(135deg,#0f1724,#081224 60%);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;text-align:center;padding:20px}
+    #splash h1{font-size:28px;color:var(--accent);margin-bottom:10px}
+    #splash h2{font-size:22px;margin:6px 0}
+    #splash button{margin-top:20px}
+  </style>
+</head>
+<body>
+  <div id="splash">
+    <h1>أهلاً وسهلاً</h1>
+    <h2 id="guestNameSplash">ضيفنا الكريم</h2>
+    <p>يسعدنا حضوركم ومشاركتنا فرحتنا</p>
+    <button id="enterBtn">افتح الدعوة</button>
+  </div>
+
+  <div class="wrap" id="mainContent">
+    <div class="hero">
+      <div class="card floating">
+        <h1>بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</h1>
+        <div class="names" id="coupleNames">باسط &amp; تانيا</div>
+        <div class="subtitle">ندعوكم لمشاركتنا فرحة عقد قراننا وحفل زفافنا</div>
+
+        <div class="countdown" aria-hidden="false">
+          <div class="seg"><div class="num" id="days">--</div><div class="lbl">يوم</div></div>
+          <div class="seg"><div class="num" id="hours">--</div><div class="lbl">ساعة</div></div>
+          <div class="seg"><div class="num" id="minutes">--</div><div class="lbl">دقيقة</div></div>
+          <div class="seg"><div class="num" id="seconds">--</div><div class="lbl">ثانية</div></div>
+        </div>
+
+        <div style="margin-top:12px">📅 <strong id="eventDate">الخميس، 1 يناير 2026 - الساعة 6:00 مساءً</strong></div>
+        <div style="margin-top:6px">📍 <span id="eventPlace">ساحة إندونيسيا - الدرسة، القاهرة</span></div>
+
+        <div class="controls">
+          <button id="openInvite">افتح الدعوة</button>
+          <button class="opt" id="printBtn">طباعة / حفظ PDF</button>
+          <button class="opt" id="shareWA">مشاركة عبر واتساب</button>
+        </div>
+
+        <div class="rsvp card" style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">تأكيد الحضور</h3>
+          <input id="guestName" placeholder="اسم الضيف" aria-label="اسم الضيف">
+          <select id="attendSelect" style="margin-top:8px">
+            <option value="حاضر">سأحضر</option>
+            <option value="غير حاضر">لن أتمكن من الحضور</option>
+            <option value="مؤكد؟">غير متأكد</option>
+          </select>
+          <textarea id="note" placeholder="رسالة قصيرة (اختياري)" style="margin-top:8px"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="rsvpBtn">أرسل تأكيد</button>
+            <button class="opt" id="clearBtn">مسح</button>
+          </div>
+          <div class="guest-preview" id="guestPreview">لم يتم تأكيد أي ضيف بعد.</div>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0">تفاصيل الحفل</h2>
+        <p>برنامج الحفل:</p>
+        <ul>
+          <li>دخول الضيوف والاستقبال - 05:00 م</li>
+          <li>مراسم العقد - 06:00 م</li>
+          <li>استراحة ثم وليمة - 07:00 م</li>
+        </ul>
+
+        <div class="map" id="mapHolder">
+          <iframe id="mapFrame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.152423381255!2d31.305548575474107!3d30.06318781786088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583f9dbe3c27a1%3A0xa7a3f12dd0bafcd7!2z2KfZhNiz2YjYp9ivINmE2YTYp9ix2Kkg2KfZhNmF2LnZh9iv2Kk!5e0!3m2!1sar!2seg!4v1726918863957!5m2!1sar!2seg" style="border:0;width:100%;height:100%" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <h3 style="margin-top:12px">معرض صور</h3>
+        <div class="gallery" id="gallery">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="صورة 1">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="صورة 2">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="صورة 3">
+        </div>
+
+        <audio id="bgMusic" controls style="margin-top:12px;width:100%">
+          <source src="" type="audio/mpeg">
+          لم يتوفر ملف موسيقى. يمكنك تحميل ملفك الخاص.
+        </audio>
+
+        <footer>ننتظركم على أحر من الجمر 💖</footer>
+      </div>
+    </div>
+
+    <!-- modal invite -->
+    <div id="modal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.7);align-items:center;justify-content:center;padding:20px">
+      <div style="max-width:760px;width:100%" class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 style="margin:0">دعوتنا</h2>
+          <button id="closeModal" class="opt">اغلاق</button>
+        </div>
+        <div style="padding-top:12px">
+          <h3 id="modalNames">باسط &amp; تانيا</h3>
+          <p id="modalText">نتشرف بدعوتكم لحضور حفل زفافنا، نرجو تأكيد الحضور عبر الاستمارة.</p>
+          <div style="margin-top:8px">التاريخ: <strong id="modalDate">الخميس، 1 يناير 2026</strong></div>
+          <div style="margin-top:6px">المكان: <strong id="modalPlace">ساحة إندونيسيا - الدرسة، القاهرة</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // تعديل القيم الافتراضية هنا بسهولة
+    const EVENT = {
+      names: 'باسط & تانيا',
+      dateISO: '2026-01-01T18:00:00',
+      datePretty: 'الخميس، 1 يناير 2026 - الساعة 6:00 مساءً',
+      placePretty: 'ساحة إندونيسيا - الدرسة، القاهرة'
+    }
+
+    document.getElementById('coupleNames').textContent = EVENT.names;
+    document.getElementById('modalNames').textContent = EVENT.names;
+    document.getElementById('eventDate').textContent = EVENT.datePretty;
+    document.getElementById('modalDate').textContent = EVENT.datePretty;
+    document.getElementById('eventPlace').textContent = EVENT.placePretty;
+    document.getElementById('modalPlace').textContent = EVENT.placePretty;
+
+    // countdown
+    function updateCountdown(){
+      const now = new Date();
+      const target = new Date(EVENT.dateISO);
+      const diff = Math.max(0, target - now);
+      const s = Math.floor(diff/1000)%60;
+      const m = Math.floor(diff/1000/60)%60;
+      const h = Math.floor(diff/1000/60/60)%24;
+      const d = Math.floor(diff/1000/60/60/24);
+      document.getElementById('days').textContent = d;
+      document.getElementById('hours').textContent = h;
+      document.getElementById('minutes').textContent = m;
+      document.getElementById('seconds').textContent = s;
+    }
+    setInterval(updateCountdown,1000); updateCountdown();
+
+    // splash handling with URL param
+    const urlParams = new URLSearchParams(window.location.search);
+    const guest = urlParams.get('to');
+    document.getElementById('guestNameSplash').textContent = guest ? guest : 'ضيفنا الكريم';
+    document.getElementById('enterBtn').addEventListener('click',()=>{
+      document.getElementById('splash').style.display='none';
+      document.getElementById('mainContent').style.display='block';
+    });
+
+    // modal
+    document.getElementById('openInvite').addEventListener('click',()=>document.getElementById('modal').style.display='flex')
+    document.getElementById('closeModal').addEventListener('click',()=>document.getElementById('modal').style.display='none')
+
+    // RSVP handling (local-only)
+    const rsvpBtn = document.getElementById('rsvpBtn');
+    rsvpBtn.addEventListener('click',()=>{
+      const name = document.getElementById('guestName').value.trim();
+      const att = document.getElementById('attendSelect').value;
+      const note = document.getElementById('note').value.trim();
+      if(!name){alert('الرجاء إدخال اسم الضيف');return}
+      const entry = {name,att,note,time:new Date().toISOString()};
+      const arr = JSON.parse(localStorage.getItem('rsvp')||'[]'); arr.push(entry); localStorage.setItem('rsvp',JSON.stringify(arr));
+      document.getElementById('guestPreview').innerHTML = `<strong>${name}</strong> — ${att}<div style="opacity:0.85;margin-top:6px">${note||''}</div>`;
+      alert('تم إرسال تأكيدك — شكراً!');
+      document.getElementById('guestName').value=''; document.getElementById('note').value='';
+    })
+    document.getElementById('clearBtn').addEventListener('click',()=>{localStorage.removeItem('rsvp');document.getElementById('guestPreview').textContent='لم يتم تأكيد أي ضيف بعد.'})
+
+    // Print
+    document.getElementById('printBtn').addEventListener('click',()=>window.print())
+
+    // WhatsApp share
+    document.getElementById('shareWA').addEventListener('click',()=>{
+      const txt = encodeURIComponent(`دعوتنا: ${EVENT.names}\n${EVENT.datePretty}\n${EVENT.placePretty}\n\n`);
+      const url = window.location.href.split('?')[0];
+      window.open(`https://wa.me/?text=${txt}${encodeURIComponent(url)}`,'_blank')
+    })
+
+    // small touch: click on gallery image to open in new tab
+    document.getElementById('gallery').addEventListener('click',e=>{
+      if(e.target.tagName==='IMG') window.open(e.target.src,'_blank')
+    })
+
+    // load saved RSVP preview if any
+    const saved = JSON.parse(localStorage.getItem('rsvp')||'[]');
+    if(saved.length){const last=saved[saved.length-1]; document.getElementById('guestPreview').innerHTML=`<strong>${last.name}</strong> — ${last.att}<div style="opacity:0.85;margin-top:6px">${last.note||''}</div>`}
+  </script>
+</body>
+</html>
